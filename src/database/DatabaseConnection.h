@@ -1,6 +1,6 @@
 // DatabaseConnection.h
 #pragma once
-
+#include <odbcinst.h>
 #include <sql.h>
 #include <sqlext.h>
 
