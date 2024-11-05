@@ -1,8 +1,8 @@
 // Car.cpp
 #include "Car.h"
 
+#include <iomanip>  // Для std::fixed и std::setprecision
 #include <iostream>
-
 Car::Car() : id(0), mileage(0), manufacturePrice(0.0), salePrice(0.0), purchasePrice(0.0), expertId(0) {}
 
 Car::Car(int id, const std::string& make, const std::string& model, const std::string& color,
@@ -30,5 +30,5 @@ Car::Car(int id, const std::string& make, const std::string& model, const std::s
 
 void Car::print() const {
     std::cout << "ID: " << id << ", Марка: " << make << ", Модель: " << model << ", Цвет: " << color
-              << ", Цена продажи: " << salePrice << std::endl;
+              << ", Цена продажи: " << std::fixed << std::setprecision(2) << salePrice << std::endl;
 }

@@ -1,9 +1,3 @@
--- Если база данных еще не создана, создайте ее вручную:
--- В командной строке или через клиент psql:
--- CREATE DATABASE autodealership;
-
--- Подключение к базе данных (в psql):
--- \c autodealership;
 
 -- Создание таблицы должностей
 CREATE TABLE Positions (
