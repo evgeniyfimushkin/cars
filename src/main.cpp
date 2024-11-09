@@ -28,6 +28,7 @@ int main() {
             return 1;
         }
 
+
         // Инициализируем таблицы
         TablesInitializer initializer(dbConn);
         initializer.initializeTables();
