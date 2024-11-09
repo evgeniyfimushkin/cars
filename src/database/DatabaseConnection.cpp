@@ -11,28 +11,28 @@ DatabaseConnection::~DatabaseConnection() { disconnect(); }
 bool DatabaseConnection::connect() {
     SQLRETURN ret;
 
-    // Allocate environment handle
+    // 1. Выделение дескриптора окружения
     ret = SQLAllocHandle(SQL_HANDLE_ENV, SQL_NULL_HANDLE, &env);
     if (!SQL_SUCCEEDED(ret)) {
         std::cerr << "Error allocating environment handle." << std::endl;
         return false;
     }
 
-    // Set the ODBC version environment attribute
+    // 2. Задание версии ODBC
     ret = SQLSetEnvAttr(env, SQL_ATTR_ODBC_VERSION, (void*)SQL_OV_ODBC3, 0);
     if (!SQL_SUCCEEDED(ret)) {
         std::cerr << "Error setting ODBC version." << std::endl;
         return false;
     }
 
-    // Allocate connection handle
+    // 3. Выделение дескриптора соединения
     ret = SQLAllocHandle(SQL_HANDLE_DBC, env, &dbc);
     if (!SQL_SUCCEEDED(ret)) {
         std::cerr << "Error allocating connection handle." << std::endl;
         return false;
     }
 
-    // Connect to the data source
+    // 4. Подключение к базе данных
     SQLCHAR outConnStr[1024];
     SQLSMALLINT outConnStrLen;
 

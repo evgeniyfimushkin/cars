@@ -6,7 +6,8 @@
 // Для работы с SQL типами данных
 #include <sqltypes.h>
 
-TableDataGateway::TableDataGateway(DatabaseConnection& dbConn) : dbConn(dbConn) {}
+TableDataGateway::TableDataGateway(DatabaseConnection &dbConn) : dbConn(dbConn) {
+}
 
 //
 // Методы для работы с сотрудниками
@@ -19,11 +20,11 @@ std::vector<Employee> TableDataGateway::getAllEmployees() {
     SQLRETURN ret;
     SQLAllocHandle(SQL_HANDLE_STMT, dbConn.getConnectionHandle(), &stmt);
 
-    const char* sql =
-        "SELECT employee_id, last_name, first_name, patronymic, address, date_of_birth, position_id, salary "
-        "FROM Employees";
+    const char *sql =
+            "SELECT employee_id, last_name, first_name, patronymic, address, date_of_birth, position_id, salary "
+            "FROM Employees";
 
-    ret = SQLExecDirect(stmt, (SQLCHAR*)sql, SQL_NTS);
+    ret = SQLExecDirect(stmt, (SQLCHAR *) sql, SQL_NTS);
     if (SQL_SUCCEEDED(ret)) {
         while (SQLFetch(stmt) == SQL_SUCCESS) {
             Employee emp;
@@ -70,31 +71,31 @@ Employee TableDataGateway::getEmployeeByIndex(int index) {
     }
 }
 
-void TableDataGateway::addEmployee(const Employee& employee) {
+void TableDataGateway::addEmployee(const Employee &employee) {
     SQLHSTMT stmt;
     SQLRETURN ret;
     SQLAllocHandle(SQL_HANDLE_STMT, dbConn.getConnectionHandle(), &stmt);
 
-    const char* sql =
-        "INSERT INTO Employees (last_name, first_name, patronymic, address, date_of_birth, position_id, "
-        "salary) VALUES (?, ?, ?, ?, ?, ?, ?)";
-    ret = SQLPrepare(stmt, (SQLCHAR*)sql, SQL_NTS);
+    const char *sql =
+            "INSERT INTO Employees (last_name, first_name, patronymic, address, date_of_birth, position_id, "
+            "salary) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    ret = SQLPrepare(stmt, (SQLCHAR *) sql, SQL_NTS);
 
     if (SQL_SUCCEEDED(ret)) {
         SQLBindParameter(stmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 50, 0,
-                         (SQLPOINTER)employee.lastName.c_str(), 0, NULL);
+                         (SQLPOINTER) employee.lastName.c_str(), 0, NULL);
         SQLBindParameter(stmt, 2, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 50, 0,
-                         (SQLPOINTER)employee.firstName.c_str(), 0, NULL);
+                         (SQLPOINTER) employee.firstName.c_str(), 0, NULL);
         SQLBindParameter(stmt, 3, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 50, 0,
-                         (SQLPOINTER)employee.patronymic.c_str(), 0, NULL);
+                         (SQLPOINTER) employee.patronymic.c_str(), 0, NULL);
         SQLBindParameter(stmt, 4, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 200, 0,
-                         (SQLPOINTER)employee.address.c_str(), 0, NULL);
+                         (SQLPOINTER) employee.address.c_str(), 0, NULL);
         SQLBindParameter(stmt, 5, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_TYPE_DATE, 0, 0,
-                         (SQLPOINTER)employee.dateOfBirth.c_str(), 0, NULL);
+                         (SQLPOINTER) employee.dateOfBirth.c_str(), 0, NULL);
         SQLBindParameter(stmt, 6, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0,
-                         (SQLPOINTER)&employee.positionId, 0, NULL);
+                         (SQLPOINTER) &employee.positionId, 0, NULL);
         SQLBindParameter(stmt, 7, SQL_PARAM_INPUT, SQL_C_DOUBLE, SQL_NUMERIC, 10, 2,
-                         (SQLPOINTER)&employee.salary, 0, NULL);
+                         (SQLPOINTER) &employee.salary, 0, NULL);
 
         ret = SQLExecute(stmt);
         if (SQL_SUCCEEDED(ret)) {
@@ -111,32 +112,32 @@ void TableDataGateway::addEmployee(const Employee& employee) {
     SQLFreeHandle(SQL_HANDLE_STMT, stmt);
 }
 
-void TableDataGateway::updateEmployee(const Employee& employee) {
+void TableDataGateway::updateEmployee(const Employee &employee) {
     SQLHSTMT stmt;
     SQLRETURN ret;
     SQLAllocHandle(SQL_HANDLE_STMT, dbConn.getConnectionHandle(), &stmt);
 
-    const char* sql =
-        "UPDATE Employees SET last_name = ?, first_name = ?, patronymic = ?, address = ?, date_of_birth = ?, "
-        "position_id = ?, salary = ? WHERE employee_id = ?";
-    ret = SQLPrepare(stmt, (SQLCHAR*)sql, SQL_NTS);
+    const char *sql =
+            "UPDATE Employees SET last_name = ?, first_name = ?, patronymic = ?, address = ?, date_of_birth = ?, "
+            "position_id = ?, salary = ? WHERE employee_id = ?";
+    ret = SQLPrepare(stmt, (SQLCHAR *) sql, SQL_NTS);
 
     if (SQL_SUCCEEDED(ret)) {
         SQLBindParameter(stmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 50, 0,
-                         (SQLPOINTER)employee.lastName.c_str(), 0, NULL);
+                         (SQLPOINTER) employee.lastName.c_str(), 0, NULL);
         SQLBindParameter(stmt, 2, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 50, 0,
-                         (SQLPOINTER)employee.firstName.c_str(), 0, NULL);
+                         (SQLPOINTER) employee.firstName.c_str(), 0, NULL);
         SQLBindParameter(stmt, 3, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 50, 0,
-                         (SQLPOINTER)employee.patronymic.c_str(), 0, NULL);
+                         (SQLPOINTER) employee.patronymic.c_str(), 0, NULL);
         SQLBindParameter(stmt, 4, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 200, 0,
-                         (SQLPOINTER)employee.address.c_str(), 0, NULL);
+                         (SQLPOINTER) employee.address.c_str(), 0, NULL);
         SQLBindParameter(stmt, 5, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_TYPE_DATE, 0, 0,
-                         (SQLPOINTER)employee.dateOfBirth.c_str(), 0, NULL);
+                         (SQLPOINTER) employee.dateOfBirth.c_str(), 0, NULL);
         SQLBindParameter(stmt, 6, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0,
-                         (SQLPOINTER)&employee.positionId, 0, NULL);
+                         (SQLPOINTER) &employee.positionId, 0, NULL);
         SQLBindParameter(stmt, 7, SQL_PARAM_INPUT, SQL_C_DOUBLE, SQL_NUMERIC, 10, 2,
-                         (SQLPOINTER)&employee.salary, 0, NULL);
-        SQLBindParameter(stmt, 8, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, (SQLPOINTER)&employee.id,
+                         (SQLPOINTER) &employee.salary, 0, NULL);
+        SQLBindParameter(stmt, 8, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, (SQLPOINTER) &employee.id,
                          0, NULL);
 
         ret = SQLExecute(stmt);
@@ -159,11 +160,11 @@ void TableDataGateway::deleteEmployee(int employeeId) {
     SQLRETURN ret;
     SQLAllocHandle(SQL_HANDLE_STMT, dbConn.getConnectionHandle(), &stmt);
 
-    const char* sql = "DELETE FROM Employees WHERE employee_id = ?";
-    ret = SQLPrepare(stmt, (SQLCHAR*)sql, SQL_NTS);
+    const char *sql = "DELETE FROM Employees WHERE employee_id = ?";
+    ret = SQLPrepare(stmt, (SQLCHAR *) sql, SQL_NTS);
 
     if (SQL_SUCCEEDED(ret)) {
-        SQLBindParameter(stmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, (SQLPOINTER)&employeeId, 0,
+        SQLBindParameter(stmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, (SQLPOINTER) &employeeId, 0,
                          NULL);
 
         ret = SQLExecute(stmt);
@@ -182,12 +183,6 @@ void TableDataGateway::deleteEmployee(int employeeId) {
 }
 
 //
-// Аналогичные методы для клиентов, автомобилей и запчастей
-//
-
-// TableDataGateway.cpp
-
-//
 // Методы для работы с клиентами
 //
 
@@ -198,9 +193,9 @@ std::vector<Client> TableDataGateway::getAllClients() {
     SQLRETURN ret;
     SQLAllocHandle(SQL_HANDLE_STMT, dbConn.getConnectionHandle(), &stmt);
 
-    const char* sql = "SELECT client_id, first_name, last_name, patronymic, passport_data FROM Clients";
+    const char *sql = "SELECT client_id, first_name, last_name, patronymic, passport_data FROM Clients";
 
-    ret = SQLExecDirect(stmt, (SQLCHAR*)sql, SQL_NTS);
+    ret = SQLExecDirect(stmt, (SQLCHAR *) sql, SQL_NTS);
     if (SQL_SUCCEEDED(ret)) {
         while (SQLFetch(stmt) == SQL_SUCCESS) {
             Client client;
@@ -240,24 +235,24 @@ Client TableDataGateway::getClientByIndex(int index) {
     }
 }
 
-void TableDataGateway::addClient(const Client& client) {
+void TableDataGateway::addClient(const Client &client) {
     SQLHSTMT stmt;
     SQLRETURN ret;
     SQLAllocHandle(SQL_HANDLE_STMT, dbConn.getConnectionHandle(), &stmt);
 
-    const char* sql =
-        "INSERT INTO Clients (first_name, last_name, patronymic, passport_data) VALUES (?, ?, ?, ?)";
-    ret = SQLPrepare(stmt, (SQLCHAR*)sql, SQL_NTS);
+    const char *sql =
+            "INSERT INTO Clients (first_name, last_name, patronymic, passport_data) VALUES (?, ?, ?, ?)";
+    ret = SQLPrepare(stmt, (SQLCHAR *) sql, SQL_NTS);
 
     if (SQL_SUCCEEDED(ret)) {
         SQLBindParameter(stmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 50, 0,
-                         (SQLPOINTER)client.firstName.c_str(), 0, NULL);
+                         (SQLPOINTER) client.firstName.c_str(), 0, NULL);
         SQLBindParameter(stmt, 2, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 50, 0,
-                         (SQLPOINTER)client.lastName.c_str(), 0, NULL);
+                         (SQLPOINTER) client.lastName.c_str(), 0, NULL);
         SQLBindParameter(stmt, 3, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 50, 0,
-                         (SQLPOINTER)client.patronymic.c_str(), 0, NULL);
+                         (SQLPOINTER) client.patronymic.c_str(), 0, NULL);
         SQLBindParameter(stmt, 4, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 100, 0,
-                         (SQLPOINTER)client.passportData.c_str(), 0, NULL);
+                         (SQLPOINTER) client.passportData.c_str(), 0, NULL);
 
         ret = SQLExecute(stmt);
         if (SQL_SUCCEEDED(ret)) {
@@ -274,26 +269,26 @@ void TableDataGateway::addClient(const Client& client) {
     SQLFreeHandle(SQL_HANDLE_STMT, stmt);
 }
 
-void TableDataGateway::updateClient(const Client& client) {
+void TableDataGateway::updateClient(const Client &client) {
     SQLHSTMT stmt;
     SQLRETURN ret;
     SQLAllocHandle(SQL_HANDLE_STMT, dbConn.getConnectionHandle(), &stmt);
 
-    const char* sql =
-        "UPDATE Clients SET first_name = ?, last_name = ?, patronymic = ?, passport_data = ? WHERE client_id "
-        "= ?";
-    ret = SQLPrepare(stmt, (SQLCHAR*)sql, SQL_NTS);
+    const char *sql =
+            "UPDATE Clients SET first_name = ?, last_name = ?, patronymic = ?, passport_data = ? WHERE client_id "
+            "= ?";
+    ret = SQLPrepare(stmt, (SQLCHAR *) sql, SQL_NTS);
 
     if (SQL_SUCCEEDED(ret)) {
         SQLBindParameter(stmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 50, 0,
-                         (SQLPOINTER)client.firstName.c_str(), 0, NULL);
+                         (SQLPOINTER) client.firstName.c_str(), 0, NULL);
         SQLBindParameter(stmt, 2, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 50, 0,
-                         (SQLPOINTER)client.lastName.c_str(), 0, NULL);
+                         (SQLPOINTER) client.lastName.c_str(), 0, NULL);
         SQLBindParameter(stmt, 3, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 50, 0,
-                         (SQLPOINTER)client.patronymic.c_str(), 0, NULL);
+                         (SQLPOINTER) client.patronymic.c_str(), 0, NULL);
         SQLBindParameter(stmt, 4, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 100, 0,
-                         (SQLPOINTER)client.passportData.c_str(), 0, NULL);
-        SQLBindParameter(stmt, 5, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, (SQLPOINTER)&client.id, 0,
+                         (SQLPOINTER) client.passportData.c_str(), 0, NULL);
+        SQLBindParameter(stmt, 5, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, (SQLPOINTER) &client.id, 0,
                          NULL);
 
         ret = SQLExecute(stmt);
@@ -316,11 +311,11 @@ void TableDataGateway::deleteClient(int clientId) {
     SQLRETURN ret;
     SQLAllocHandle(SQL_HANDLE_STMT, dbConn.getConnectionHandle(), &stmt);
 
-    const char* sql = "DELETE FROM Clients WHERE client_id = ?";
-    ret = SQLPrepare(stmt, (SQLCHAR*)sql, SQL_NTS);
+    const char *sql = "DELETE FROM Clients WHERE client_id = ?";
+    ret = SQLPrepare(stmt, (SQLCHAR *) sql, SQL_NTS);
 
     if (SQL_SUCCEEDED(ret)) {
-        SQLBindParameter(stmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, (SQLPOINTER)&clientId, 0,
+        SQLBindParameter(stmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, (SQLPOINTER) &clientId, 0,
                          NULL);
 
         ret = SQLExecute(stmt);
@@ -336,7 +331,7 @@ void TableDataGateway::deleteClient(int clientId) {
     }
 
     SQLFreeHandle(SQL_HANDLE_STMT, stmt);
-}  // TableDataGateway.cpp
+} // TableDataGateway.cpp
 
 //
 // Методы для работы с автомобилями
@@ -349,20 +344,20 @@ std::vector<Car> TableDataGateway::getAllCars() {
     SQLRETURN ret;
     SQLAllocHandle(SQL_HANDLE_STMT, dbConn.getConnectionHandle(), &stmt);
 
-    const char* sql = R"(
+    const char *sql = R"(
         SELECT car_id, make, model, color, engine_number, registration_number, body_number,
                chassis_number, manufacture_date, mileage, manufacture_price, sale_price, purchase_price,
                technical_certificate_number, technical_certificate_date, expert_id
         FROM Cars
     )";
 
-    ret = SQLExecDirect(stmt, (SQLCHAR*)sql, SQL_NTS);
+    ret = SQLExecDirect(stmt, (SQLCHAR *) sql, SQL_NTS);
     if (SQL_SUCCEEDED(ret)) {
         while (SQLFetch(stmt) == SQL_SUCCESS) {
             Car car;
             char make[51], model[51], color[31], engineNumber[51], registrationNumber[21], bodyNumber[51],
-                chassisNumber[51], manufactureDate[11], technicalCertificateNumber[51],
-                technicalCertificateDate[11];
+                    chassisNumber[51], manufactureDate[11], technicalCertificateNumber[51],
+                    technicalCertificateDate[11];
             SQLINTEGER carId, mileage, expertId;
             SQLDOUBLE manufacturePrice, salePrice, purchasePrice;
 
@@ -423,51 +418,51 @@ Car TableDataGateway::getCarByIndex(int index) {
     }
 }
 
-void TableDataGateway::addCar(const Car& car) {
+void TableDataGateway::addCar(const Car &car) {
     SQLHSTMT stmt;
     SQLRETURN ret;
     SQLAllocHandle(SQL_HANDLE_STMT, dbConn.getConnectionHandle(), &stmt);
 
-    const char* sql = R"(
+    const char *sql = R"(
         INSERT INTO Cars (make, model, color, engine_number, registration_number, body_number,
                           chassis_number, manufacture_date, mileage, manufacture_price, sale_price,
                           purchase_price, technical_certificate_number, technical_certificate_date, expert_id)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     )";
 
-    ret = SQLPrepare(stmt, (SQLCHAR*)sql, SQL_NTS);
+    ret = SQLPrepare(stmt, (SQLCHAR *) sql, SQL_NTS);
 
     if (SQL_SUCCEEDED(ret)) {
         // Привязка параметров
         SQLBindParameter(stmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 50, 0,
-                         (SQLPOINTER)car.make.c_str(), 0, NULL);
+                         (SQLPOINTER) car.make.c_str(), 0, NULL);
         SQLBindParameter(stmt, 2, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 50, 0,
-                         (SQLPOINTER)car.model.c_str(), 0, NULL);
+                         (SQLPOINTER) car.model.c_str(), 0, NULL);
         SQLBindParameter(stmt, 3, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 30, 0,
-                         (SQLPOINTER)car.color.c_str(), 0, NULL);
+                         (SQLPOINTER) car.color.c_str(), 0, NULL);
         SQLBindParameter(stmt, 4, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 50, 0,
-                         (SQLPOINTER)car.engineNumber.c_str(), 0, NULL);
+                         (SQLPOINTER) car.engineNumber.c_str(), 0, NULL);
         SQLBindParameter(stmt, 5, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 20, 0,
-                         (SQLPOINTER)car.registrationNumber.c_str(), 0, NULL);
+                         (SQLPOINTER) car.registrationNumber.c_str(), 0, NULL);
         SQLBindParameter(stmt, 6, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 50, 0,
-                         (SQLPOINTER)car.bodyNumber.c_str(), 0, NULL);
+                         (SQLPOINTER) car.bodyNumber.c_str(), 0, NULL);
         SQLBindParameter(stmt, 7, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 50, 0,
-                         (SQLPOINTER)car.chassisNumber.c_str(), 0, NULL);
+                         (SQLPOINTER) car.chassisNumber.c_str(), 0, NULL);
         SQLBindParameter(stmt, 8, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_TYPE_DATE, 0, 0,
-                         (SQLPOINTER)car.manufactureDate.c_str(), 0, NULL);
-        SQLBindParameter(stmt, 9, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, (SQLPOINTER)&car.mileage,
+                         (SQLPOINTER) car.manufactureDate.c_str(), 0, NULL);
+        SQLBindParameter(stmt, 9, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, (SQLPOINTER) &car.mileage,
                          0, NULL);
         SQLBindParameter(stmt, 10, SQL_PARAM_INPUT, SQL_C_DOUBLE, SQL_NUMERIC, 10, 2,
-                         (SQLPOINTER)&car.manufacturePrice, 0, NULL);
+                         (SQLPOINTER) &car.manufacturePrice, 0, NULL);
         SQLBindParameter(stmt, 11, SQL_PARAM_INPUT, SQL_C_DOUBLE, SQL_NUMERIC, 10, 2,
-                         (SQLPOINTER)&car.salePrice, 0, NULL);
+                         (SQLPOINTER) &car.salePrice, 0, NULL);
         SQLBindParameter(stmt, 12, SQL_PARAM_INPUT, SQL_C_DOUBLE, SQL_NUMERIC, 10, 2,
-                         (SQLPOINTER)&car.purchasePrice, 0, NULL);
+                         (SQLPOINTER) &car.purchasePrice, 0, NULL);
         SQLBindParameter(stmt, 13, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 50, 0,
-                         (SQLPOINTER)car.technicalCertificateNumber.c_str(), 0, NULL);
+                         (SQLPOINTER) car.technicalCertificateNumber.c_str(), 0, NULL);
         SQLBindParameter(stmt, 14, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_TYPE_DATE, 0, 0,
-                         (SQLPOINTER)car.technicalCertificateDate.c_str(), 0, NULL);
-        SQLBindParameter(stmt, 15, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, (SQLPOINTER)&car.expertId,
+                         (SQLPOINTER) car.technicalCertificateDate.c_str(), 0, NULL);
+        SQLBindParameter(stmt, 15, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, (SQLPOINTER) &car.expertId,
                          0, NULL);
 
         ret = SQLExecute(stmt);
@@ -485,25 +480,25 @@ void TableDataGateway::addCar(const Car& car) {
     SQLFreeHandle(SQL_HANDLE_STMT, stmt);
 }
 
-void TableDataGateway::updateCar(const Car& car) {
+void TableDataGateway::updateCar(const Car &car) {
     SQLHSTMT stmt;
     SQLRETURN ret;
     SQLAllocHandle(SQL_HANDLE_STMT, dbConn.getConnectionHandle(), &stmt);
 
-    const char* sql = R"(
+    const char *sql = R"(
         UPDATE Cars SET make = ?, model = ?, color = ?, engine_number = ?, registration_number = ?, body_number = ?,
                         chassis_number = ?, manufacture_date = ?, mileage = ?, manufacture_price = ?, sale_price = ?,
                         purchase_price = ?, technical_certificate_number = ?, technical_certificate_date = ?, expert_id = ?
         WHERE car_id = ?
     )";
 
-    ret = SQLPrepare(stmt, (SQLCHAR*)sql, SQL_NTS);
+    ret = SQLPrepare(stmt, (SQLCHAR *) sql, SQL_NTS);
 
     if (SQL_SUCCEEDED(ret)) {
         // Привязка параметров (аналогично методу addCar)
         // ...
         // Привязка параметра car_id
-        SQLBindParameter(stmt, 16, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, (SQLPOINTER)&car.id, 0,
+        SQLBindParameter(stmt, 16, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, (SQLPOINTER) &car.id, 0,
                          NULL);
 
         ret = SQLExecute(stmt);
@@ -526,11 +521,11 @@ void TableDataGateway::deleteCar(int carId) {
     SQLRETURN ret;
     SQLAllocHandle(SQL_HANDLE_STMT, dbConn.getConnectionHandle(), &stmt);
 
-    const char* sql = "DELETE FROM Cars WHERE car_id = ?";
-    ret = SQLPrepare(stmt, (SQLCHAR*)sql, SQL_NTS);
+    const char *sql = "DELETE FROM Cars WHERE car_id = ?";
+    ret = SQLPrepare(stmt, (SQLCHAR *) sql, SQL_NTS);
 
     if (SQL_SUCCEEDED(ret)) {
-        SQLBindParameter(stmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, (SQLPOINTER)&carId, 0,
+        SQLBindParameter(stmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, (SQLPOINTER) &carId, 0,
                          NULL);
 
         ret = SQLExecute(stmt);
@@ -547,6 +542,7 @@ void TableDataGateway::deleteCar(int carId) {
 
     SQLFreeHandle(SQL_HANDLE_STMT, stmt);
 }
+
 std::vector<SparePart> TableDataGateway::getAllSpareParts() {
     std::vector<SparePart> spareParts;
 
@@ -554,9 +550,9 @@ std::vector<SparePart> TableDataGateway::getAllSpareParts() {
     SQLRETURN ret;
     SQLAllocHandle(SQL_HANDLE_STMT, dbConn.getConnectionHandle(), &stmt);
 
-    const char* sql = "SELECT spare_part_id, name, make, model, price, stock_quantity FROM SpareParts";
+    const char *sql = "SELECT spare_part_id, name, make, model, price, stock_quantity FROM SpareParts";
 
-    ret = SQLExecDirect(stmt, (SQLCHAR*)sql, SQL_NTS);
+    ret = SQLExecDirect(stmt, (SQLCHAR *) sql, SQL_NTS);
     if (SQL_SUCCEEDED(ret)) {
         while (SQLFetch(stmt) == SQL_SUCCESS) {
             SparePart sp;
@@ -599,26 +595,26 @@ SparePart TableDataGateway::getSparePartByIndex(int index) {
     }
 }
 
-void TableDataGateway::addSparePart(const SparePart& sparePart) {
+void TableDataGateway::addSparePart(const SparePart &sparePart) {
     SQLHSTMT stmt;
     SQLRETURN ret;
     SQLAllocHandle(SQL_HANDLE_STMT, dbConn.getConnectionHandle(), &stmt);
 
-    const char* sql =
-        "INSERT INTO SpareParts (name, make, model, price, stock_quantity) VALUES (?, ?, ?, ?, ?)";
-    ret = SQLPrepare(stmt, (SQLCHAR*)sql, SQL_NTS);
+    const char *sql =
+            "INSERT INTO SpareParts (name, make, model, price, stock_quantity) VALUES (?, ?, ?, ?, ?)";
+    ret = SQLPrepare(stmt, (SQLCHAR *) sql, SQL_NTS);
 
     if (SQL_SUCCEEDED(ret)) {
         SQLBindParameter(stmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 100, 0,
-                         (SQLPOINTER)sparePart.name.c_str(), 0, NULL);
+                         (SQLPOINTER) sparePart.name.c_str(), 0, NULL);
         SQLBindParameter(stmt, 2, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 50, 0,
-                         (SQLPOINTER)sparePart.make.c_str(), 0, NULL);
+                         (SQLPOINTER) sparePart.make.c_str(), 0, NULL);
         SQLBindParameter(stmt, 3, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 50, 0,
-                         (SQLPOINTER)sparePart.model.c_str(), 0, NULL);
+                         (SQLPOINTER) sparePart.model.c_str(), 0, NULL);
         SQLBindParameter(stmt, 4, SQL_PARAM_INPUT, SQL_C_DOUBLE, SQL_NUMERIC, 10, 2,
-                         (SQLPOINTER)&sparePart.price, 0, NULL);
+                         (SQLPOINTER) &sparePart.price, 0, NULL);
         SQLBindParameter(stmt, 5, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0,
-                         (SQLPOINTER)&sparePart.stockQuantity, 0, NULL);
+                         (SQLPOINTER) &sparePart.stockQuantity, 0, NULL);
 
         ret = SQLExecute(stmt);
         if (SQL_SUCCEEDED(ret)) {
@@ -635,29 +631,29 @@ void TableDataGateway::addSparePart(const SparePart& sparePart) {
     SQLFreeHandle(SQL_HANDLE_STMT, stmt);
 }
 
-void TableDataGateway::updateSparePart(const SparePart& sparePart) {
+void TableDataGateway::updateSparePart(const SparePart &sparePart) {
     SQLHSTMT stmt;
     SQLRETURN ret;
     SQLAllocHandle(SQL_HANDLE_STMT, dbConn.getConnectionHandle(), &stmt);
 
-    const char* sql =
-        "UPDATE SpareParts SET name = ?, make = ?, model = ?, price = ?, stock_quantity = ? WHERE "
-        "spare_part_id = ?";
-    ret = SQLPrepare(stmt, (SQLCHAR*)sql, SQL_NTS);
+    const char *sql =
+            "UPDATE SpareParts SET name = ?, make = ?, model = ?, price = ?, stock_quantity = ? WHERE "
+            "spare_part_id = ?";
+    ret = SQLPrepare(stmt, (SQLCHAR *) sql, SQL_NTS);
 
     if (SQL_SUCCEEDED(ret)) {
         // Привязка параметров
         SQLBindParameter(stmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 100, 0,
-                         (SQLPOINTER)sparePart.name.c_str(), 0, NULL);
+                         (SQLPOINTER) sparePart.name.c_str(), 0, NULL);
         SQLBindParameter(stmt, 2, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 50, 0,
-                         (SQLPOINTER)sparePart.make.c_str(), 0, NULL);
+                         (SQLPOINTER) sparePart.make.c_str(), 0, NULL);
         SQLBindParameter(stmt, 3, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, 50, 0,
-                         (SQLPOINTER)sparePart.model.c_str(), 0, NULL);
+                         (SQLPOINTER) sparePart.model.c_str(), 0, NULL);
         SQLBindParameter(stmt, 4, SQL_PARAM_INPUT, SQL_C_DOUBLE, SQL_NUMERIC, 10, 2,
-                         (SQLPOINTER)&sparePart.price, 0, NULL);
+                         (SQLPOINTER) &sparePart.price, 0, NULL);
         SQLBindParameter(stmt, 5, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0,
-                         (SQLPOINTER)&sparePart.stockQuantity, 0, NULL);
-        SQLBindParameter(stmt, 6, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, (SQLPOINTER)&sparePart.id,
+                         (SQLPOINTER) &sparePart.stockQuantity, 0, NULL);
+        SQLBindParameter(stmt, 6, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, (SQLPOINTER) &sparePart.id,
                          0, NULL);
 
         ret = SQLExecute(stmt);
@@ -680,11 +676,11 @@ void TableDataGateway::deleteSparePart(int sparePartId) {
     SQLRETURN ret;
     SQLAllocHandle(SQL_HANDLE_STMT, dbConn.getConnectionHandle(), &stmt);
 
-    const char* sql = "DELETE FROM SpareParts WHERE spare_part_id = ?";
-    ret = SQLPrepare(stmt, (SQLCHAR*)sql, SQL_NTS);
+    const char *sql = "DELETE FROM SpareParts WHERE spare_part_id = ?";
+    ret = SQLPrepare(stmt, (SQLCHAR *) sql, SQL_NTS);
 
     if (SQL_SUCCEEDED(ret)) {
-        SQLBindParameter(stmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, (SQLPOINTER)&sparePartId,
+        SQLBindParameter(stmt, 1, SQL_PARAM_INPUT, SQL_C_SLONG, SQL_INTEGER, 0, 0, (SQLPOINTER) &sparePartId,
                          0, NULL);
 
         ret = SQLExecute(stmt);
